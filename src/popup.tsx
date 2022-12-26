@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 
-const Popup = () => {
+function Popup() {
   const [count, setCount] = useState(0);
   const [currentURL, setCurrentURL] = useState<string>();
 
@@ -22,11 +22,11 @@ const Popup = () => {
         chrome.tabs.sendMessage(
           tab.id,
           {
-            color: "#555555",
+            color: '#555555',
           },
           (msg) => {
-            console.log("result message:", msg);
-          }
+            console.log('result message:', msg);
+          },
         );
       }
     });
@@ -34,24 +34,23 @@ const Popup = () => {
 
   return (
     <>
-      <ul style={{ minWidth: "700px" }}>
+      <ul style={{ minWidth: '700px' }}>
         <li>Current URL: {currentURL}</li>
         <li>Current Time: {new Date().toLocaleTimeString()}</li>
       </ul>
-      <button
-        onClick={() => setCount(count + 1)}
-        style={{ marginRight: "5px" }}
-      >
+      <button type="button" onClick={() => setCount(count + 1)} style={{ marginRight: '5px' }}>
         count up
       </button>
-      <button onClick={changeBackground}>change background</button>
+      <button type="button" onClick={changeBackground}>
+        change background
+      </button>
     </>
   );
-};
+}
 
 ReactDOM.render(
   <React.StrictMode>
     <Popup />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
