@@ -26,5 +26,6 @@ module.exports = {
         labelAttributes: ['htmlFor'],
       },
     ],
+    'prefer-destructuring': ['error', { object: true, array: false }],
   },
 };
