@@ -1,25 +1,21 @@
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ enabled: true });
-  console.log('Default option set true');
+  chrome.storage.local.set({ enabled: true });
 });
 
 chrome.runtime.onMessage.addListener((message /* sender, sendResponse */) => {
   if (typeof message === 'object' && message.type === 'btnChange') {
-    console.log('btnChange');
     runBtnChangeCallBack(chrome);
   }
   return true;
 });
 
 chrome.webNavigation.onCompleted.addListener(function (e) {
-  console.log('onCompleted');
   chrome.storage.local.get('enabled', (data) => {
     if (isValidTrigger(data, e)) runScript();
   });
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (e) {
-  console.log('onHistoryStateUpdated');
   chrome.storage.local.get('enabled', (data) => {
     if (isValidTrigger(data, e)) runScript();
   });
@@ -40,7 +36,6 @@ async function runBtnChangeCallBack(chrome: typeof globalThis.chrome) {
         target: { tabId: tab.id },
         files: ['content.js'],
       });
-      console.log('success');
     } else {
       // 여기서 컨텐츠로 메시지 보내거나 아니면 그냥 바로 팝업에서 보내도 될듯?
       console.log('button off');
