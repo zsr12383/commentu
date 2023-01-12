@@ -1,3 +1,5 @@
+import { isValidURL } from './common';
+
 // function getTime(currentTimeString: string) {
 //   if (currentTimeString.length > 5)
 //     return (
@@ -146,14 +148,18 @@
 //     ReplyExtractor.instance = new ReplyExtractor();
 //   }
 // }
-console.log(456);
 
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
-    console.log(
-      `Storage key "${key}" in namespace "${namespace}" changed.`,
-      `Old value was "${oldValue}", new value is "${newValue}".`,
-    );
-  }
-});
+(function () {
+  console.log(456);
+})();
+
+// chrome.storage.onChanged.addListener((changes, namespace) => {
+//   // eslint-disable-next-line no-restricted-syntax
+//   for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+//     console.log(
+//       `Storage key "${key}" in namespace "${namespace}" changed.`,
+//       `Old value was "${oldValue}", new value is "${newValue}".`,
+//     );
+//   }
+// });
+// 스크립트 하나 더 만들어서 탭 생성 이벤트에 걸어주는 식으로 바꾸기

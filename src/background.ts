@@ -1,25 +1,25 @@
-const isValidURL = (e: chrome.webNavigation.WebNavigationFramedCallbackDetails) =>
-  e.url.match(/^https:\/\/www.youtube.com\/watch?.+/);
+import { isValidURL } from './common';
+
+function debounce() {
+  const table: any = {};
+  return (tabId: number) => {
+    if (table[tabId]) clearTimeout(table[tabId]);
+    table[tabId] = setTimeout(() => {
+      runScript(tabId);
+    }, 512);
+  };
+}
+
+const debounceFunc = debounce();
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ enabled: true });
 });
 
-chrome.webNavigation.onCompleted.addListener(function (e) {
+chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
   if (e.frameId || !isValidURL(e)) return;
-  console.log(e.frameId);
   chrome.storage.local.get('enabled', (data) => {
-    if (!data.enabled) return;
-    runScript(e.tabId);
-  });
-});
-
-chrome.webNavigation.onHistoryStateUpdated.addListener(function (e) {
-  if (e.frameId || !isValidURL(e)) return;
-  console.log(e.frameId);
-  chrome.storage.local.get('enabled', (data) => {
-    if (!data.enabled) return;
-    runScript(e.tabId);
+    debounceFunc(e.tabId);
   });
 });
 
