@@ -6,7 +6,7 @@ function debounce() {
     if (table[tabId]) clearTimeout(table[tabId]);
     table[tabId] = setTimeout(() => {
       runScript(tabId);
-    }, 512);
+    }, 2000);
   };
 }
 
@@ -17,7 +17,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
-  if (e.frameId || !isValidURL(e)) return;
+  if (e.frameId || !isValidURL(e.url)) return;
   chrome.storage.local.get('enabled', (data) => {
     debounceFunc(e.tabId);
   });

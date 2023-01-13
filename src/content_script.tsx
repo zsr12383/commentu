@@ -150,6 +150,8 @@ import { isValidURL } from './common';
 // }
 
 (function () {
+  const currentURL = document.location.href;
+  if (!isValidURL(currentURL)) return;
   console.log(456);
 })();
 
