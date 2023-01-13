@@ -1,3 +1,4 @@
+import { run } from 'jest';
 import { isValidURL } from './common/URL';
 
 function debounce() {
@@ -30,13 +31,29 @@ async function runScript(tabId: number) {
   });
 }
 
-// chrome.storage.onChanged.addListener((changes, namespace) => {
-//   // eslint-disable-next-line no-restricted-syntax
-//   for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
-//     console.log(
-//       `Storage key "${key}" in namespace "${namespace}" changed.`,
-//       `Old value was "${oldValue}", new value is "${newValue}".`,
-//     );
-//   }
-// });
-// 탭 별로 돌면서 runscript 돌리기, 이것도 나중에 따로 이벤트 만들어야함
+function turnOff(tabId: number) {
+  console.log('turn off');
+}
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace !== 'local') return;
+  const data = Object.entries(changes).find((ele) => {
+    const [key] = ele;
+    return key === 'enabled';
+  });
+  if (!data) return;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const { newValue } = data[1];
+
+  chrome.tabs.query({}, function (tabs) {
+    tabs.forEach((tab) => {
+      if (!tab.id || !tab.url || !isValidURL(tab.url)) return;
+      if (newValue === true) {
+        runScript(tab.id);
+      } else if (newValue === false) {
+        turnOff(tab.id);
+      }
+    });
+  });
+});
