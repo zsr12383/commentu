@@ -1,4 +1,4 @@
-import { isValidURL } from './common';
+import { isValidURL } from './common/URL';
 
 function debounce() {
   const table: any = {};
@@ -29,3 +29,14 @@ async function runScript(tabId: number) {
     files: ['js/content_script.js'],
   });
 }
+
+// chrome.storage.onChanged.addListener((changes, namespace) => {
+//   // eslint-disable-next-line no-restricted-syntax
+//   for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+//     console.log(
+//       `Storage key "${key}" in namespace "${namespace}" changed.`,
+//       `Old value was "${oldValue}", new value is "${newValue}".`,
+//     );
+//   }
+// });
+// 탭 별로 돌면서 runscript 돌리기, 이것도 나중에 따로 이벤트 만들어야함
