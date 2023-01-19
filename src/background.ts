@@ -1,4 +1,3 @@
-import { run } from 'jest';
 import { isValidURL } from './common/URL';
 
 function debounce() {
@@ -27,7 +26,7 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
 async function runScript(tabId: number) {
   chrome.scripting.executeScript({
     target: { tabId },
-    files: ['js/content_script.js'],
+    files: ['js/mountScript.js'],
   });
 }
 

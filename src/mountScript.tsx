@@ -55,17 +55,17 @@ function bundleComments(replys: any) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line no-unused-expressions
-    obj[indexTime] ? obj[indexTime].push(reply) : (obj[indexTime] = [reply]);
+    res[indexTime] ? res[indexTime].push(reply) : (res[indexTime] = [reply]);
   });
   return res;
 }
 
 function ReplyList() {
   const [comments, setComments] = useState<any>(null);
-
   const currentURL = useMemo(() => document.location.href, [document.location.href]);
   // eslint-disable-next-line react/jsx-no-useless-fragment
   if (!isValidURL(currentURL)) return <></>;
+
   useEffect(() => {
     getReply().then((reply) => {
       setComments(bundleComments(reply));
@@ -75,10 +75,24 @@ function ReplyList() {
 }
 
 (() => {
-  const newDiv = document.createElement('div');
-  const siblingNode = document.getElementById('below');
+  if (!isValidURL(document.location.href)) return;
+  const root = document.getElementById('commentu');
+  if (root) {
+    ReactDOM.render(
+      <React.StrictMode>
+        <ReplyList />
+      </React.StrictMode>,
+      root,
+    );
+    return;
+  }
+
   const parentNode = document.getElementById('primary-inner');
-  if (parentNode) parentNode.insertBefore(newDiv, siblingNode);
+  if (!parentNode) return;
+  const newDiv = document.createElement('div');
+  newDiv.id = 'commentu';
+  const siblingNode = document.getElementById('below');
+  parentNode.insertBefore(newDiv, siblingNode);
 
   ReactDOM.render(
     <React.StrictMode>
