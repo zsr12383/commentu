@@ -1,3 +1,5 @@
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
+import ReactDOM from 'react-dom';
 import { isValidURL } from './common/URL';
 
 function getTime(currentTimeString: string) {
@@ -31,31 +33,57 @@ async function getReply() {
         reply.push(ele.snippet.topLevelComment.snippet.textDisplay);
       });
     });
-  const ans = {};
+  const res = {};
   reply.forEach((ele) => {
     let tmp;
     // eslint-disable-next-line no-cond-assign
     if ((tmp = ele.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</))) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      ans[getTime(tmp[1])] = ele;
+      res[getTime(tmp[1])] = ele;
     }
   });
-  return ans;
+  return res;
 }
 
-(async function () {
-  const currentURL = document.location.href;
-  if (!isValidURL(currentURL)) return;
-  const data = await chrome.storage.local.get(currentURL);
-  console.log(data);
-  if (!data[currentURL]) {
-    const reply = await getReply();
-    console.log(reply);
-  }
+function bundleComments(replys: any) {
+  let indexTime = 5;
+  const res = {};
+  Object.entries(replys).forEach((ele) => {
+    const [time, reply] = ele;
+    while (indexTime < parseInt(time, 10)) indexTime += 5;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // eslint-disable-next-line no-unused-expressions
+    obj[indexTime] ? obj[indexTime].push(reply) : (obj[indexTime] = [reply]);
+  });
+  return res;
+}
 
-  // 이미 있는지 확인
-  // O.자막을 꺼내온다.
-  // X.댓글을 받아오고 저장한다.
-  // on/off 여부를 통해 자막 삽입하는 script 실행
+function ReplyList() {
+  const [comments, setComments] = useState<any>(null);
+
+  const currentURL = useMemo(() => document.location.href, [document.location.href]);
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (!isValidURL(currentURL)) return <></>;
+  useEffect(() => {
+    getReply().then((reply) => {
+      setComments(bundleComments(reply));
+    });
+  }, []);
+  return <div>abcd</div>;
+}
+
+(() => {
+  const newDiv = document.createElement('div');
+  const siblingNode = document.getElementById('below');
+  const parentNode = document.getElementById('primary-inner');
+  if (parentNode) parentNode.insertBefore(newDiv, siblingNode);
+
+  ReactDOM.render(
+    <React.StrictMode>
+      <ReplyList />
+    </React.StrictMode>,
+    newDiv,
+  );
 })();
