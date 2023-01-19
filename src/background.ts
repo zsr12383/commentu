@@ -11,7 +11,7 @@ function debounce() {
   };
 }
 
-const debounceFunc = debounce();
+const debounceScript = debounce();
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ enabled: true });
@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
   if (e.frameId || !isValidURL(e.url)) return;
   chrome.storage.local.get('enabled', (data) => {
-    debounceFunc(e.tabId);
+    debounceScript(e.tabId);
   });
 });
 
@@ -32,7 +32,10 @@ async function runScript(tabId: number) {
 }
 
 function turnOff(tabId: number) {
-  console.log('turn off');
+  chrome.scripting.executeScript({
+    target: { tabId },
+    files: ['js/unMount.js'],
+  });
 }
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
