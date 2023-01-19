@@ -11,7 +11,7 @@ module.exports = {
     options: path.join(srcDir, 'options.tsx'),
     background: path.join(srcDir, 'background.ts'),
     mountScript: path.join(srcDir, 'mountScript.tsx'),
-    unMount: path.join(srcDir, '/script/unMount.ts'),
+    unMount: path.join(srcDir, '/script/unMount.tsx'),
   },
   output: {
     path: path.join(__dirname, '../dist/js'),

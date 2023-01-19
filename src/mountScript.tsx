@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { isValidURL } from './common/URL';
 
@@ -62,6 +62,7 @@ function bundleComments(replys: any) {
 
 function ReplyList() {
   const [comments, setComments] = useState<any>(null);
+  const [test, setTest] = useState<number>(0);
   const currentURL = useMemo(() => document.location.href, [document.location.href]);
   // eslint-disable-next-line react/jsx-no-useless-fragment
   if (!isValidURL(currentURL)) return <></>;
@@ -71,12 +72,23 @@ function ReplyList() {
       setComments(bundleComments(reply));
     });
   }, []);
-  return <div>abcd</div>;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log(1);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return <div>{test}</div>;
 }
 
 (() => {
   if (!isValidURL(document.location.href)) return;
-  const root = document.getElementById('commentu');
+  let root = document.getElementById('commentu');
   if (root) {
     ReactDOM.render(
       <React.StrictMode>
@@ -89,15 +101,15 @@ function ReplyList() {
 
   const parentNode = document.getElementById('primary-inner');
   if (!parentNode) return;
-  const newDiv = document.createElement('div');
-  newDiv.id = 'commentu';
+  root = document.createElement('div');
+  root.id = 'commentu';
   const siblingNode = document.getElementById('below');
-  parentNode.insertBefore(newDiv, siblingNode);
+  parentNode.insertBefore(root, siblingNode);
 
   ReactDOM.render(
     <React.StrictMode>
       <ReplyList />
     </React.StrictMode>,
-    newDiv,
+    root,
   );
 })();

@@ -1,29 +1,34 @@
 import { isValidURL } from './common/URL';
 
-function debounce() {
+function debounce(func: any) {
   const table: any = {};
   return (tabId: number) => {
     if (table[tabId]) clearTimeout(table[tabId]);
     table[tabId] = setTimeout(() => {
-      runScript(tabId);
+      func(tabId);
     }, 2000);
   };
 }
 
-const debounceScript = debounce();
+const debounceRunScript = debounce(runScript);
+const debounceTurnOff = debounce(turnOff);
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ enabled: true });
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
-  if (e.frameId || !isValidURL(e.url)) return;
-  chrome.storage.local.get('enabled', (data) => {
-    debounceScript(e.tabId);
-  });
+  if (e.frameId) return;
+  if (isValidURL(e.url)) {
+    chrome.storage.local.get('enabled', (data) => {
+      if (data.enabled) debounceRunScript(e.tabId);
+    });
+  } else {
+    debounceTurnOff(e.tabId);
+  }
 });
 
-async function runScript(tabId: number) {
+function runScript(tabId: number) {
   chrome.scripting.executeScript({
     target: { tabId },
     files: ['js/mountScript.js'],
