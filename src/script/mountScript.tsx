@@ -21,22 +21,46 @@ function getTime(currentTimeString: string) {
   );
 }
 
+async function fetchAPI(url: string) {
+  const tmpArray: any = [];
+  let nextPageToken = '';
+  await fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data.items) return;
+      // eslint-disable-next-line prefer-destructuring
+      if (data.nextPageToken) nextPageToken = data.nextPageToken;
+      data.items.forEach((ele: { snippet: { topLevelComment: { snippet: { textDisplay: never } } } }) => {
+        tmpArray.push(ele.snippet.topLevelComment.snippet);
+      });
+    });
+  return { tmpArray, nextPageToken };
+}
+
+const repeatFetch = async (ret: any, cnt: number, apiKey: string, target: string) => {
+  let i = 0;
+  let reply: any = [];
+  while (ret.nextPageToken && i < cnt) {
+    const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}`;
+    // eslint-disable-next-line no-param-reassign,no-await-in-loop
+    ret = await fetchAPI(url);
+    // eslint-disable-next-line no-param-reassign
+    reply = [...reply, ...ret.tmpArray];
+    i += 1;
+  }
+  return reply;
+};
+
 async function getReply() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const target = window.location.search.match(/=([^=&/]+)/)[1];
   const apiKey = 'AIzaSyAZTp4U-uezgl12gW_Vu4yZDQ9Z6styTuY';
-
   const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100`;
-  const reply: any[] = [];
-  await fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.items) return;
-      data.items.forEach((ele: { snippet: { topLevelComment: { snippet: { textDisplay: never } } } }) => {
-        reply.push(ele.snippet.topLevelComment.snippet);
-      });
-    });
+  let reply: any[] = [];
+  const ret = await fetchAPI(url);
+  reply = [...ret.tmpArray];
+  reply = [...reply, ...(await repeatFetch(ret, 2, apiKey, target))];
   const res = {};
   reply.forEach((ele) => {
     let tmp;
