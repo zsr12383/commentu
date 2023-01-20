@@ -6,9 +6,6 @@
 
 A Chrome extension that allows you to view comments that indicate the current playback time on YouTube.
 
-## 개발 비화
-~~크롬 앱의 지원이 곧 중단된단 사실을 모르고 시작한 토이 프로젝트~~
-
 ## Demo
 
 ### normal
