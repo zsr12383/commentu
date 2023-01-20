@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import { isValidURL } from './common/URL';
+import 'react-toastify/dist/ReactToastify.css';
+import './toast.css';
 
 function getTime(currentTimeString: string) {
   if (currentTimeString.length > 5)
@@ -63,7 +66,6 @@ function bundleComments(replys: any) {
 
 function ReplyList() {
   const [comments, setComments] = useState<any>(null);
-  const [displayList, setDisplayList] = useState<string[]>([]);
 
   useEffect(() => {
     getReply().then((reply) => {
@@ -73,11 +75,12 @@ function ReplyList() {
 
   useEffect(() => {
     if (comments === null) return;
+    console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
     const interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime) + 5;
       if (!comments[currentTime]) return;
-      setDisplayList(comments[currentTime]);
+      comments[currentTime].forEach((ele: string) => toast(ele));
     }, 1000);
 
     // eslint-disable-next-line consistent-return
@@ -87,10 +90,7 @@ function ReplyList() {
   // 원래 시간을 넣어서 key로 사용하기
   return (
     <div>
-      {displayList.map((ele, idx) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <div key={idx}>{ele}</div>
-      ))}
+      <ToastContainer autoClose={4000} bodyClassName="toast-message" />
     </div>
   );
 }

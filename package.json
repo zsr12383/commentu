@@ -18,16 +18,21 @@
   },
   "dependencies": {
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-toastify": "^9.1.1",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/chrome": "0.0.158",
     "@types/jest": "^27.0.2",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-toastify": "^4.1.0",
+    "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
     "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.7.3",
     "eslint": "^8.30.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -40,6 +45,7 @@
     "jest": "^27.2.1",
     "prettier": "^2.8.1",
     "rimraf": "^3.0.2 ",
+    "style-loader": "^3.3.1",
     "ts-jest": "^27.0.5",
     "ts-loader": "^8.0.0",
     "typescript": "^4.4.3 ",
