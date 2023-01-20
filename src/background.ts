@@ -59,7 +59,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
       if (newValue === true) {
         runScript(tab.id);
       } else if (newValue === false) {
-        turnOff(tab.id);
+        // turnOff(tab.id);
       }
     });
   });

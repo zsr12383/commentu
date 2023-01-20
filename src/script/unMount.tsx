@@ -3,7 +3,7 @@ import React from 'react';
 
 (() => {
   const root = document.getElementById('commentu');
-  if (!root) return;
-  ReactDOM.unmountComponentAtNode(root);
-  root.remove();
+  // if (!root) return;
+  // ReactDOM.unmountComponentAtNode(root);
+  // root.remove();
 })();

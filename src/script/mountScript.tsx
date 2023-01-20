@@ -64,6 +64,16 @@ function bundleComments(replys: any) {
   return res;
 }
 
+function removeHandler(this: HTMLMediaElement) {
+  this.removeEventListener('abort', removeHandler);
+  const root = document.getElementById('commentu');
+  if (!root) return;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  ReactDOM.unmountComponentAtNode(root);
+  root.remove();
+}
+
 function ReplyList() {
   const [comments, setComments] = useState<any>(null);
 
@@ -75,16 +85,35 @@ function ReplyList() {
 
   useEffect(() => {
     if (comments === null) return;
-    console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
-    const interval = setInterval(() => {
+    let interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime);
       if (!comments[currentTime]) return;
       comments[currentTime].forEach((ele: string) => toast(ele));
     }, 1000);
 
+    function pauseHandler() {
+      clearInterval(interval);
+    }
+
+    function playingHandler() {
+      interval = setInterval(() => {
+        const currentTime = Math.floor(videoElement.currentTime);
+        if (!comments[currentTime]) return;
+        comments[currentTime].forEach((ele: string) => toast(ele));
+      }, 1000);
+    }
+
+    videoElement.addEventListener('abort', removeHandler);
+    videoElement.addEventListener('pause', pauseHandler);
+    videoElement.addEventListener('playing', playingHandler);
+
     // eslint-disable-next-line consistent-return
-    return () => clearInterval(interval);
+    return () => {
+      videoElement.removeEventListener('pause', pauseHandler);
+      videoElement.removeEventListener('playing', playingHandler);
+      clearInterval(interval);
+    };
   }, [comments]);
 
   // 원래 시간을 넣어서 key로 사용하기
