@@ -55,7 +55,7 @@ function bundleComments(replys: any) {
   Object.entries(replys).forEach((ele) => {
     const [time, reply] = ele;
     let indexTime = parseInt(time, 10) - 1;
-    indexTime = indexTime < 4 ? 4 : indexTime;
+    indexTime = indexTime < 5 ? 5 : indexTime;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line no-unused-expressions
@@ -85,6 +85,7 @@ function ReplyList() {
 
   useEffect(() => {
     if (comments === null) return;
+    console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
     let interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime);
