@@ -36,6 +36,6 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://www.youtube.com/watch?*"
+    "<all_urls>"
   ]
 }
