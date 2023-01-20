@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import { isValidURL } from './common/URL';
+import { isValidURL } from '../common/URL';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
 

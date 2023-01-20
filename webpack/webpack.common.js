@@ -10,7 +10,7 @@ module.exports = {
     popup: path.join(srcDir, 'popup.tsx'),
     options: path.join(srcDir, 'options.tsx'),
     background: path.join(srcDir, 'background.ts'),
-    mountScript: path.join(srcDir, 'mountScript.tsx'),
+    mountScript: path.join(srcDir, '/script/mountScript.tsx'),
     unMount: path.join(srcDir, '/script/unMount.tsx'),
   },
   output: {
