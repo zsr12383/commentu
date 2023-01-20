@@ -65,14 +65,18 @@ function bundleComments(replys: any) {
   return res;
 }
 
-function removeHandler(this: HTMLMediaElement) {
-  this.removeEventListener('abort', removeHandler);
+function remove() {
   const root = document.getElementById('commentu');
   if (!root) return;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   ReactDOM.unmountComponentAtNode(root);
   root.remove();
+}
+
+function removeHandler(this: HTMLMediaElement) {
+  this.removeEventListener('abort', removeHandler);
+  remove();
 }
 
 function ReplyList() {
@@ -109,11 +113,13 @@ function ReplyList() {
     videoElement.addEventListener('abort', removeHandler);
     videoElement.addEventListener('pause', pauseHandler);
     videoElement.addEventListener('playing', playingHandler);
+    chrome.storage.onChanged.addListener(remove);
 
     // eslint-disable-next-line consistent-return
     return () => {
       videoElement.removeEventListener('pause', pauseHandler);
       videoElement.removeEventListener('playing', playingHandler);
+      chrome.storage.onChanged.removeListener(remove);
       clearInterval(interval);
     };
   }, [comments]);
