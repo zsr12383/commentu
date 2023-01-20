@@ -24,7 +24,7 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
       if (data.enabled) debounceRunScript(e.tabId);
     });
   } else {
-    debounceTurnOff(e.tabId);
+    // debounceTurnOff(e.tabId);
   }
 });
 
