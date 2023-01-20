@@ -55,7 +55,7 @@ async function getReply() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const target = window.location.search.match(/=([^=&/]+)/)[1];
-  const apiKey = 'AIzaSyAZTp4U-uezgl12gW_Vu4yZDQ9Z6styTuY';
+  const apiKey = '';
   const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100`;
   let reply: any[] = [];
   const ret = await fetchAPI(url);
