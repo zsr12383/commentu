@@ -12,7 +12,9 @@ A Chrome extension that allows you to view comments that indicate the current pl
 ## Demo
 
 ### normal
-[<img src="https://i.ytimg.com/vi/Hn4sfC2PbhI/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCx7YCv2ugylYzvHGi_LUbSPLlCog" width="100%">](https://www.youtube.com/watch?v=uZF6gK7f3BI&ab_channel=JKL)
+[commentu5.webm](https://user-images.githubusercontent.com/62196278/213796216-659b2a2a-f35a-4983-81c0-6a14a3f89c57.webm)
+
+<br>
 
 ### cinematic
 [commentu2.webm](https://user-images.githubusercontent.com/62196278/213736142-b130d54d-4baa-4441-9e8e-ad9b2cb509e2.webm)
