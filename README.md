@@ -1,29 +1,16 @@
-# Chrome Extension TypeScript Starter
+# commentu
 
 ![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
 
-Chrome Extension, TypeScript and Visual Studio Code
+A Chrome extension that allows you to view comments that indicate the current playback time on YouTube.
+## demo
 
-## Prerequisites
 
-* [node + npm](https://nodejs.org/) (Current Version)
-
-## Option
-
-* [Visual Studio Code](https://code.visualstudio.com/)
-
-## Includes the following
-
+## Includes
 * TypeScript
 * Webpack
 * React
 * Jest
-* Example Code
-    * Chrome Storage
-    * Options Version 2
-    * content script
-    * count up badge number
-    * background
 
 ## Project Structure
 
@@ -34,33 +21,29 @@ Chrome Extension, TypeScript and Visual Studio Code
 
 ## Setup
 
-```
+```bash
 npm install
+# or
+yarn install
 ```
-
-## Import as Visual Studio Code project
-
-...
 
 ## Build
 
-```
+```bash
 npm run build
+# or
+yarn build
 ```
 
 ## Build in watch mode
 
 ### terminal
 
-```
+```bash
 npm run watch
+or
+yarn watch
 ```
-
-### Visual Studio Code
-
-Run watch mode.
-
-type `Ctrl + Shift + B`
 
 ## Load extension to chrome
 
