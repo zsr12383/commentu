@@ -5,9 +5,11 @@
 유튜브에서 현재 재생 시각을 나타내는 댓글을 함께 볼 수 있는 크롬 익스텐션
 
 A Chrome extension that allows you to view comments that indicate the current playback time on YouTube.
-## demo
 
-<br>
+## 개발 비화
+~~크롬 앱의 지원이 곧 중단된단 사실을 모르고 시작한 토이 프로젝트~~
+
+## demo
 
 ### normal
 [commentu2.webm](https://user-images.githubusercontent.com/62196278/213736142-b130d54d-4baa-4441-9e8e-ad9b2cb509e2.webm)
