@@ -90,7 +90,7 @@ function ReplyList() {
   // 원래 시간을 넣어서 key로 사용하기
   return (
     <div>
-      <ToastContainer autoClose={4000} bodyClassName="toast-message" />
+      <ToastContainer autoClose={4000} className="toast-message" position="bottom-center" theme="dark" />
     </div>
   );
 }
