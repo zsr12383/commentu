@@ -9,7 +9,7 @@ A Chrome extension that allows you to view comments that indicate the current pl
 ## 개발 비화
 ~~크롬 앱의 지원이 곧 중단된단 사실을 모르고 시작한 토이 프로젝트~~
 
-## demo
+## Demo
 
 ### normal
 [commentu2.webm](https://user-images.githubusercontent.com/62196278/213736142-b130d54d-4baa-4441-9e8e-ad9b2cb509e2.webm)
