@@ -32,6 +32,7 @@ async function getReply() {
   await fetch(url)
     .then((res) => res.json())
     .then((data) => {
+      if (!data.items) return;
       data.items.forEach((ele: { snippet: { topLevelComment: { snippet: { textDisplay: never } } } }) => {
         reply.push(ele.snippet.topLevelComment.snippet);
       });
