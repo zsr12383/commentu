@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { isValidURL } from './common/URL';
 
@@ -30,17 +30,18 @@ async function getReply() {
     .then((res) => res.json())
     .then((data) => {
       data.items.forEach((ele: { snippet: { topLevelComment: { snippet: { textDisplay: never } } } }) => {
-        reply.push(ele.snippet.topLevelComment.snippet.textDisplay);
+        reply.push(ele.snippet.topLevelComment.snippet);
       });
     });
   const res = {};
   reply.forEach((ele) => {
     let tmp;
+    const { textDisplay, textOriginal } = ele;
     // eslint-disable-next-line no-cond-assign
-    if ((tmp = ele.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</))) {
+    if ((tmp = textDisplay.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</))) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      res[getTime(tmp[1])] = ele;
+      res[getTime(tmp[1])] = textOriginal;
     }
   });
   return res;
@@ -62,10 +63,7 @@ function bundleComments(replys: any) {
 
 function ReplyList() {
   const [comments, setComments] = useState<any>(null);
-  const [test, setTest] = useState<number>(0);
-  const currentURL = useMemo(() => document.location.href, [document.location.href]);
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  if (!isValidURL(currentURL)) return <></>;
+  const [displayList, setDisplayList] = useState<string[]>([]);
 
   useEffect(() => {
     getReply().then((reply) => {
@@ -74,16 +72,27 @@ function ReplyList() {
   }, []);
 
   useEffect(() => {
+    if (comments === null) return;
+    const videoElement = document.querySelector('video') as HTMLMediaElement;
     const interval = setInterval(() => {
-      console.log(1);
+      const currentTime = Math.floor(videoElement.currentTime) + 5;
+      if (!comments[currentTime]) return;
+      setDisplayList(comments[currentTime]);
     }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+    // eslint-disable-next-line consistent-return
+    return () => clearInterval(interval);
+  }, [comments]);
 
-  return <div>{test}</div>;
+  // 원래 시간을 넣어서 key로 사용하기
+  return (
+    <div>
+      {displayList.map((ele, idx) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div key={idx}>{ele}</div>
+      ))}
+    </div>
+  );
 }
 
 (() => {
