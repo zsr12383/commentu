@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import { isValidURL } from '../common/URL';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
+import { isValidURL } from '../common/URL';
 
 function getTime(currentTimeString: string) {
   if (currentTimeString.length > 5)
@@ -55,7 +55,7 @@ async function getReply() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const target = window.location.search.match(/=([^=&/]+)/)[1];
-  const apiKey = '';
+  const apiKey = process.env.API_KEY ? process.env.API_KEY : '';
   const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100`;
   let reply: any[] = [];
   const ret = await fetchAPI(url);
