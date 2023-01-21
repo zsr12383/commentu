@@ -8,9 +8,6 @@
       "*://*.google.com/*"
     ]
   },
-  "options_ui": {
-    "page": "options.html"
-  },
   "action": {
     "default_icon": "bridge48.png",
     "default_popup": "popup.html"
