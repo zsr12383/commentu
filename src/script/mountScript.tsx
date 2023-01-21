@@ -150,7 +150,7 @@ function ReplyList() {
 
   return (
     <div>
-      <ToastContainer autoClose={5000} className="toast-message" position="bottom-center" theme="dark" limit={4} />
+      <ToastContainer autoClose={5000} className="toast-message" position="bottom-center" theme="dark" limit={3} />
     </div>
   );
 }
