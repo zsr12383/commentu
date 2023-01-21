@@ -3,5 +3,4 @@ node_modules/
 dist/
 tmp/
 .idea/
-yarn.lock
 .env
