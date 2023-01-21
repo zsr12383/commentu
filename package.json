@@ -21,7 +21,8 @@
     "dotenv-webpack": "^8.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-toastify": "^9.1.1"
+    "react-toastify": "^9.1.1",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/chrome": "0.0.158",
@@ -29,6 +30,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-toastify": "^4.1.0",
+    "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
     "copy-webpack-plugin": "^9.0.1",
