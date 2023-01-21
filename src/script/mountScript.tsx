@@ -148,10 +148,9 @@ function ReplyList() {
     };
   }, [comments]);
 
-  // 원래 시간을 넣어서 key로 사용하기
   return (
     <div>
-      <ToastContainer autoClose={5000} className="toast-message" position="bottom-center" theme="dark" />
+      <ToastContainer autoClose={5000} className="toast-message" position="bottom-center" theme="dark" limit={4} />
     </div>
   );
 }
