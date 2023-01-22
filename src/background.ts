@@ -29,16 +29,22 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
 });
 
 function runScript(tabId: number) {
-  chrome.scripting.executeScript({
-    target: { tabId },
-    files: ['js/mountScript.js'],
+  chrome.tabs.get(tabId, function () {
+    if (chrome.runtime.lastError) return;
+    chrome.scripting.executeScript({
+      target: { tabId },
+      files: ['js/mountScript.js'],
+    });
   });
 }
 
 function turnOff(tabId: number) {
-  chrome.scripting.executeScript({
-    target: { tabId },
-    files: ['js/unMount.js'],
+  chrome.tabs.get(tabId, function () {
+    if (chrome.runtime.lastError) return;
+    chrome.scripting.executeScript({
+      target: { tabId },
+      files: ['js/unMount.js'],
+    });
   });
 }
 
