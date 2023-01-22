@@ -37,11 +37,14 @@ async function fetchAPI(url: string) {
   return { tmpArray, nextPageToken };
 }
 
+// videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}
 const repeatFetch = async (ret: any, cnt: number, apiKey: string, target: string) => {
   let i = 0;
   let reply: any = [];
   while (ret.nextPageToken && i < cnt) {
     const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}`;
+    // const url = `https://18.181.208.27:80/api?videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}`;
+    console.log(url);
     // eslint-disable-next-line no-param-reassign,no-await-in-loop
     ret = await fetchAPI(url);
     // eslint-disable-next-line no-param-reassign
@@ -57,6 +60,8 @@ async function getReply() {
   const target = window.location.search.match(/=([^=&/]+)/)[1];
   const apiKey = process.env.API_KEY ? process.env.API_KEY : '';
   const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100`;
+  // const url = `https://18.181.208.27:80/api?videoId=${target}&maxResults=100`;
+  console.log(url);
   let reply: any[] = [];
   const ret = await fetchAPI(url);
   reply = [...ret.tmpArray];
