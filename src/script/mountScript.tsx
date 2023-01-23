@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
 import { isValidURL } from '../common/URL';
 
+const URL = 'https://gh8vx163lc.execute-api.ap-northeast-2.amazonaws.com/commentuV1/commentu?videoId=';
+
 function getTime(currentTimeString: string) {
   if (currentTimeString.length > 5)
     return (
@@ -21,53 +23,13 @@ function getTime(currentTimeString: string) {
   );
 }
 
-async function fetchAPI(url: string) {
-  const tmpArray: any = [];
-  let nextPageToken = '';
-  await fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.items) return;
-      // eslint-disable-next-line prefer-destructuring
-      if (data.nextPageToken) nextPageToken = data.nextPageToken;
-      data.items.forEach((ele: { snippet: { topLevelComment: { snippet: { textDisplay: never } } } }) => {
-        tmpArray.push(ele.snippet.topLevelComment.snippet);
-      });
-    });
-  return { tmpArray, nextPageToken };
-}
-
-// videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}
-const repeatFetch = async (ret: any, cnt: number, apiKey: string, target: string) => {
-  let i = 0;
-  let reply: any = [];
-  while (ret.nextPageToken && i < cnt) {
-    const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}`;
-    // const url = `https://18.181.208.27:80/api?videoId=${target}&maxResults=100&pageToken=${ret.nextPageToken}`;
-    console.log(url);
-    // eslint-disable-next-line no-param-reassign,no-await-in-loop
-    ret = await fetchAPI(url);
-    // eslint-disable-next-line no-param-reassign
-    reply = [...reply, ...ret.tmpArray];
-    i += 1;
-  }
-  return reply;
-};
-
 async function getReply() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const target = window.location.search.match(/=([^=&/]+)/)[1];
-  const apiKey = process.env.API_KEY ? process.env.API_KEY : '';
-  const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${apiKey}&videoId=${target}&maxResults=100`;
-  // const url = `https://18.181.208.27:80/api?videoId=${target}&maxResults=100`;
-  console.log(url);
-  let reply: any[] = [];
-  const ret = await fetchAPI(url);
-  reply = [...ret.tmpArray];
-  reply = [...reply, ...(await repeatFetch(ret, 2, apiKey, target))];
+  const reply = await fetch(`${URL}${target}`).then((res) => res.json());
   const res = {};
-  reply.forEach((ele) => {
+  reply.forEach((ele: { textDisplay: string; textOriginal: string }) => {
     let tmp;
     const { textDisplay, textOriginal } = ele;
     // eslint-disable-next-line no-cond-assign
@@ -85,7 +47,7 @@ function bundleComments(replys: any) {
   Object.entries(replys).forEach((ele) => {
     const [time, reply] = ele;
     let indexTime = parseInt(time, 10) - 1;
-    indexTime = indexTime < 5 ? 5 : indexTime;
+    indexTime = indexTime < 8 ? 8 : indexTime;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line no-unused-expressions

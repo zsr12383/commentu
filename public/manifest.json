@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "commentu",
   "description": "This is a Chrome extension that shows the most popular comment indicating the current time",
-  "version": "1.0",
+  "version": "1.0.1",
   "externally_connectable": {
     "matches": [
       "*://*.google.com/*"
