@@ -24,6 +24,8 @@ A Chrome extension that allows you to view comments that indicate the current pl
 
 ## Project Structure
 
+![Web App Reference Architecture](https://user-images.githubusercontent.com/62196278/213968684-9432cc43-34ea-4159-bdff-9eb255e57a78.svg)
+
 * src/typescript: TypeScript source files
 * src/assets: static files
 * dist: Chrome Extension directory
