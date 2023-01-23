@@ -1,5 +1,6 @@
 .toast-message {
-    width: 32vw;
+    opacity: 0.5;
+    width: 60vw;
     min-width: 270px;
     font-size: 1.8rem;
     min-font-size: 1.4rem;
