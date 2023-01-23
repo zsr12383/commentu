@@ -66,7 +66,6 @@ function remove() {
 }
 
 function removeHandler(this: HTMLMediaElement) {
-  this.removeEventListener('abort', removeHandler);
   remove();
 }
 
@@ -94,6 +93,7 @@ function ReplyList() {
     }
 
     function playingHandler() {
+      clearInterval(interval);
       interval = setInterval(() => {
         const currentTime = Math.floor(videoElement.currentTime);
         if (!comments[currentTime]) return;
@@ -108,6 +108,7 @@ function ReplyList() {
 
     // eslint-disable-next-line consistent-return
     return () => {
+      videoElement.removeEventListener('abort', removeHandler);
       videoElement.removeEventListener('pause', pauseHandler);
       videoElement.removeEventListener('playing', playingHandler);
       chrome.storage.onChanged.removeListener(remove);
