@@ -30,12 +30,9 @@ A Chrome extension that allows you to view comments that indicate the current pl
 * dist/js: Generated JavaScript files
 
 ## API_KEY
-You need key of YouTube Data API V3: https://console.cloud.google.com/apis/
+~~You need key of YouTube Data API V3: https://console.cloud.google.com/apis/~~
 
-**./.env**
-```bash
-API_KEY=#your API KEY here
-```
+API Gateway is complete. You don't need an API key.
 
 ## Setup
 
