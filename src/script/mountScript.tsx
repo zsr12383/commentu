@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
+import { Simulate } from 'react-dom/test-utils';
 import { isValidURL } from '../common/URL';
+import rateChange = Simulate.rateChange;
 
 const URL = 'https://gh8vx163lc.execute-api.ap-northeast-2.amazonaws.com/commentuV1/commentu?videoId=';
 
@@ -65,7 +67,7 @@ function remove() {
   root.remove();
 }
 
-function removeHandler(this: HTMLMediaElement) {
+function removeHandler() {
   remove();
 }
 
@@ -82,11 +84,12 @@ function ReplyList() {
     if (comments === null) return;
     console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
+
     let interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime);
       if (!comments[currentTime]) return;
       comments[currentTime].forEach((ele: string) => toast(ele));
-    }, 1000);
+    }, 1000 / videoElement.playbackRate);
 
     function pauseHandler() {
       clearInterval(interval);
@@ -98,12 +101,13 @@ function ReplyList() {
         const currentTime = Math.floor(videoElement.currentTime);
         if (!comments[currentTime]) return;
         comments[currentTime].forEach((ele: string) => toast(ele));
-      }, 1000);
+      }, 1000 / videoElement.playbackRate);
     }
 
     videoElement.addEventListener('abort', removeHandler);
     videoElement.addEventListener('pause', pauseHandler);
     videoElement.addEventListener('playing', playingHandler);
+    videoElement.addEventListener('ratechange', playingHandler);
     chrome.storage.onChanged.addListener(remove);
 
     // eslint-disable-next-line consistent-return
@@ -111,6 +115,7 @@ function ReplyList() {
       videoElement.removeEventListener('abort', removeHandler);
       videoElement.removeEventListener('pause', pauseHandler);
       videoElement.removeEventListener('playing', playingHandler);
+      videoElement.removeEventListener('ratechange', playingHandler);
       chrome.storage.onChanged.removeListener(remove);
       clearInterval(interval);
     };
