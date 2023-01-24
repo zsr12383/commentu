@@ -5,17 +5,18 @@ import { ColorRing } from 'react-loader-spinner';
 const ToggleWrapper = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
   padding-top: 0.5rem;
 `;
 
 const CheckBoxWrapper = styled.div`
   position: relative;
   padding: 0.5rem;
+  margin-left: 0.5rem;
 `;
 
 const ToggleTitle = styled.span`
   margin-top: 0.4rem;
+  margin-left: 0.5rem;
   font-weight: 400;
   font-size: 1rem;
   font-family: Arial, sans-serif;

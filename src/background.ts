@@ -13,7 +13,10 @@ function debounce(func: any) {
 const debounceRunScript = debounce(runScript);
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.set({ enabled: true });
+  chrome.storage.local.set({
+    enabled: true,
+    transparency: 70,
+  });
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {

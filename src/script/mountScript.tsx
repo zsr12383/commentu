@@ -40,7 +40,7 @@ interface Comment {
 }
 function bundleComments(comments: Comment[]) {
   const res: Bundle = {};
-  console.log(comments);
+  // console.log(comments);
   comments.forEach((ele: { textDisplay: string; textOriginal: string }) => {
     const { textDisplay, textOriginal } = ele;
     if (textOriginal.length > 200) return;
@@ -57,19 +57,30 @@ function bundleComments(comments: Comment[]) {
   return res;
 }
 
-function remove() {
+function turnOffHandler(changes: { [p: string]: any }) {
+  Object.entries(changes).forEach((ele) => {
+    const [key, { newValue }] = ele;
+    if (key !== 'enabled' || newValue) return;
+    abortHandler();
+  });
+}
+
+function abortHandler() {
   const root = document.getElementById('commentu');
   if (!root) return;
   ReactDOM.unmountComponentAtNode(root);
   root.remove();
 }
 
-function removeHandler() {
-  remove();
-}
-
 function ReplyList() {
   const [comments, setComments] = useState<Bundle | null>(null);
+  const [transparency, setTransparency] = useState(0.7);
+
+  useEffect(() => {
+    chrome.storage.local.get('transparency', (data) => {
+      setTransparency(data.transparency / 100);
+    });
+  }, []);
 
   useEffect(() => {
     getComments().then((comments) => {
@@ -101,25 +112,42 @@ function ReplyList() {
       }, 1000 / videoElement.playbackRate);
     }
 
-    videoElement.addEventListener('abort', removeHandler);
+    function transparencyHandler(changes: { [p: string]: any }) {
+      Object.entries(changes).forEach((ele) => {
+        const [key, { newValue }] = ele;
+        if (key !== 'transparency') return;
+        setTransparency(newValue / 100);
+      });
+    }
+
+    videoElement.addEventListener('abort', abortHandler);
     videoElement.addEventListener('pause', pauseHandler);
     videoElement.addEventListener('playing', playingHandler);
     videoElement.addEventListener('ratechange', playingHandler);
-    chrome.storage.onChanged.addListener(remove);
+    chrome.storage.onChanged.addListener(turnOffHandler);
+    chrome.storage.onChanged.addListener(transparencyHandler);
 
     return () => {
-      videoElement.removeEventListener('abort', removeHandler);
+      videoElement.removeEventListener('abort', abortHandler);
       videoElement.removeEventListener('pause', pauseHandler);
       videoElement.removeEventListener('playing', playingHandler);
       videoElement.removeEventListener('ratechange', playingHandler);
-      chrome.storage.onChanged.removeListener(remove);
+      chrome.storage.onChanged.removeListener(turnOffHandler);
+      chrome.storage.onChanged.removeListener(transparencyHandler);
       clearInterval(interval);
     };
   }, [comments]);
 
   return (
     <div>
-      <ToastContainer autoClose={5000} className="toast-message" position="bottom-center" theme="dark" limit={3} />
+      <ToastContainer
+        autoClose={5000}
+        className="toast-message"
+        position="bottom-center"
+        theme="dark"
+        limit={3}
+        style={{ opacity: transparency }}
+      />
     </div>
   );
 }
