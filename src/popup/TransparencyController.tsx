@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ColorRing } from 'react-loader-spinner';
 import { Slider } from '@mui/material';
 
 const ControllerWrapper = styled.div`
@@ -45,17 +44,6 @@ export default function TransparencyController() {
     <ControllerWrapper>
       <ToggleTitle>투명도: </ToggleTitle>
       <SliderWrapper>
-        {isLoading && (
-          <ColorRing
-            visible
-            height="80"
-            width="80"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-          />
-        )}
         {!isLoading && <Slider value={value} aria-label="Default" valueLabelDisplay="auto" onChange={handleChange} />}
       </SliderWrapper>
     </ControllerWrapper>

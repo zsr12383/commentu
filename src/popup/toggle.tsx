@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ColorRing } from 'react-loader-spinner';
 
 const ToggleWrapper = styled.div`
   display: flex;
@@ -90,17 +89,6 @@ export default function Toggle() {
     <ToggleWrapper>
       <ToggleTitle>On/Off: </ToggleTitle>
       <CheckBoxWrapper>
-        {isLoading && (
-          <ColorRing
-            visible
-            height="80"
-            width="80"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-          />
-        )}
         {!isLoading && (
           <>
             <CheckBox id="checkbox" type="checkbox" checked={isToggled} onChange={handleToggle} />
