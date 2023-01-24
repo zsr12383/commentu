@@ -1,60 +1,58 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
-import { Simulate } from 'react-dom/test-utils';
 import { isValidURL } from '../common/URL';
-import rateChange = Simulate.rateChange;
 
 const URL = 'https://gh8vx163lc.execute-api.ap-northeast-2.amazonaws.com/commentuV1/commentu?videoId=';
 
 function getTime(currentTimeString: string) {
-  if (currentTimeString.length > 5)
+  if (currentTimeString.length <= 5)
     return (
-      parseInt(currentTimeString.replace(/:.+/, ''), 10) * 3600 +
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      parseInt(currentTimeString.match(/:([0-9]+):/)[1], 10) * 60 +
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      parseInt(currentTimeString.match(/[0-9]+$/)[0], 10)
+      parseInt(currentTimeString.replace(/:[0-9]+/, ''), 10) * 60 +
+      parseInt(currentTimeString.replace(/[0-9]+:/, ''), 10)
     );
+  const minute = currentTimeString.match(/:([0-9]+):/);
+  const sec = currentTimeString.match(/[0-9]+$/);
   return (
-    parseInt(currentTimeString.replace(/:[0-9]+/, ''), 10) * 60 + parseInt(currentTimeString.replace(/[0-9]+:/, ''), 10)
+    parseInt(currentTimeString.replace(/:.+/, ''), 10) * 3600 +
+    parseInt(minute ? minute[1] : '0', 10) * 60 +
+    parseInt(sec ? sec[0] : '0', 10)
   );
 }
 
-async function getReply() {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const target = window.location.search.match(/=([^=&/]+)/)[1];
-  const reply = await fetch(`${URL}${target}`).then((res) => res.json());
-  const res = {};
-  reply.forEach((ele: { textDisplay: string; textOriginal: string }) => {
-    const { textDisplay, textOriginal } = ele;
-    if (textOriginal.length > 200) return;
-    let tmp;
-    // eslint-disable-next-line no-cond-assign
-    if ((tmp = textDisplay.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</))) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      res[getTime(tmp[1])] = textOriginal;
-    }
-  });
-  return res;
+async function getComments() {
+  const tempArray = window.location.search.match(/=([^=&/]+)/);
+  if (!tempArray) return [];
+  const target = tempArray[1];
+  const comments = await fetch(`${URL}${target}`).then((res) => res.json());
+  return comments;
 }
 
-function bundleComments(replys: any) {
-  const res = {};
-  Object.entries(replys).forEach((ele) => {
-    const [time, reply] = ele;
-    let indexTime = parseInt(time, 10) - 1;
+type Bundle = {
+  [index: string]: string[];
+};
+
+interface Comment {
+  textDisplay: string;
+  textOriginal: string;
+}
+function bundleComments(comments: Comment[]) {
+  const res: Bundle = {};
+  console.log(comments);
+  comments.forEach((ele: { textDisplay: string; textOriginal: string }) => {
+    const { textDisplay, textOriginal } = ele;
+    if (textOriginal.length > 200) return;
+    const matchResult = textDisplay.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</);
+    if (!matchResult) return;
+    let indexTime = getTime(matchResult[1]) - 1;
     indexTime = indexTime < 8 ? 8 : indexTime;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // eslint-disable-next-line no-unused-expressions
-    res[indexTime] ? res[indexTime].push(reply) : (res[indexTime] = [reply]);
+    if (res[indexTime]) {
+      res[indexTime].push(textOriginal);
+      return;
+    }
+    res[indexTime] = [textOriginal];
   });
   return res;
 }
@@ -62,8 +60,6 @@ function bundleComments(replys: any) {
 function remove() {
   const root = document.getElementById('commentu');
   if (!root) return;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   ReactDOM.unmountComponentAtNode(root);
   root.remove();
 }
@@ -73,16 +69,16 @@ function removeHandler() {
 }
 
 function ReplyList() {
-  const [comments, setComments] = useState<any>(null);
+  const [comments, setComments] = useState<Bundle | null>(null);
 
   useEffect(() => {
-    getReply().then((reply) => {
-      setComments(bundleComments(reply));
+    getComments().then((comments) => {
+      setComments(bundleComments(comments));
     });
   }, []);
 
   useEffect(() => {
-    if (comments === null) return;
+    if (comments === null) return undefined;
     console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
 
@@ -100,7 +96,7 @@ function ReplyList() {
       clearInterval(interval);
       interval = setInterval(() => {
         const currentTime = Math.floor(videoElement.currentTime);
-        if (!comments[currentTime]) return;
+        if (!comments || !comments[currentTime]) return;
         comments[currentTime].forEach((ele: string) => toast(ele));
       }, 1000 / videoElement.playbackRate);
     }
@@ -111,7 +107,6 @@ function ReplyList() {
     videoElement.addEventListener('ratechange', playingHandler);
     chrome.storage.onChanged.addListener(remove);
 
-    // eslint-disable-next-line consistent-return
     return () => {
       videoElement.removeEventListener('abort', removeHandler);
       videoElement.removeEventListener('pause', pauseHandler);
