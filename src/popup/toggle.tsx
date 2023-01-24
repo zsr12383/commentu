@@ -1,10 +1,26 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import { ColorRing } from 'react-loader-spinner';
+
+const ToggleWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  padding-top: 0.5rem;
+`;
 
 const CheckBoxWrapper = styled.div`
   position: relative;
+  padding: 0.5rem;
 `;
+
+const ToggleTitle = styled.span`
+  margin-top: 0.4rem;
+  font-weight: 400;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+`;
+
 const CheckBoxLabel = styled.label`
   position: absolute;
   top: 0;
@@ -14,6 +30,7 @@ const CheckBoxLabel = styled.label`
   border-radius: 15px;
   background: #bebebe;
   cursor: pointer;
+
   &::after {
     content: '';
     display: block;
@@ -26,14 +43,17 @@ const CheckBoxLabel = styled.label`
     transition: 0.2s;
   }
 `;
+
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
   border-radius: 15px;
   width: 42px;
   height: 26px;
+
   &:checked + ${CheckBoxLabel} {
     background: #4fbe79;
+
     &::after {
       content: '';
       display: block;
@@ -46,12 +66,14 @@ const CheckBox = styled.input`
   }
 `;
 
-function Popup() {
+export default function Toggle() {
+  const [isLoading, setIsLoading] = useState(true);
   const [isToggled, setIsToggled] = useState(false);
 
   useEffect(() => {
     chrome.storage.local.get('enabled', (data) => {
       setIsToggled(data.enabled);
+      setIsLoading(false);
     });
   }, []);
 
@@ -64,16 +86,27 @@ function Popup() {
   }, []);
 
   return (
-    <CheckBoxWrapper>
-      <CheckBox id="checkbox" type="checkbox" checked={isToggled} onChange={handleToggle} />
-      <CheckBoxLabel htmlFor="checkbox" />
-    </CheckBoxWrapper>
+    <ToggleWrapper>
+      <ToggleTitle>On/Off: </ToggleTitle>
+      <CheckBoxWrapper>
+        {isLoading && (
+          <ColorRing
+            visible
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+          />
+        )}
+        {!isLoading && (
+          <>
+            <CheckBox id="checkbox" type="checkbox" checked={isToggled} onChange={handleToggle} />
+            <CheckBoxLabel htmlFor="checkbox" />
+          </>
+        )}
+      </CheckBoxWrapper>
+    </ToggleWrapper>
   );
 }
-
-ReactDOM.render(
-  <React.StrictMode>
-    <Popup />
-  </React.StrictMode>,
-  document.getElementById('root'),
-);

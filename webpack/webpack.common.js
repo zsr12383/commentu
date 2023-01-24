@@ -2,12 +2,11 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
 const srcDir = path.join(__dirname, '..', 'src');
 
 module.exports = {
   entry: {
-    popup: path.join(srcDir, 'popup.tsx'),
+    popup: path.join(srcDir, '/popup/popup.tsx'),
     options: path.join(srcDir, 'options.tsx'),
     background: path.join(srcDir, 'background.ts'),
     mountScript: path.join(srcDir, '/script/mountScript.tsx'),
@@ -34,6 +33,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpg)$/,
+        use: ['file-loader'],
       },
     ],
   },

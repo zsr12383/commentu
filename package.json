@@ -21,8 +21,10 @@
     "dotenv-webpack": "^8.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-loader-spinner": "^5.3.4",
     "react-toastify": "^9.1.1",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "styled-reset": "^4.4.5"
   },
   "devDependencies": {
     "@types/chrome": "0.0.158",
@@ -43,6 +45,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "file-loader": "^6.2.0",
     "glob": "^7.1.6",
     "jest": "^27.2.1",
     "prettier": "^2.8.1",

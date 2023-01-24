@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "commentu",
   "description": "A Chrome extension that allows you to view comments that indicate the current playback time on YouTube.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "externally_connectable": {
     "matches": [
       "*://*.google.com/*"
