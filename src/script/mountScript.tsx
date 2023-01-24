@@ -61,11 +61,16 @@ function turnOffHandler(changes: { [p: string]: any }) {
   Object.entries(changes).forEach((ele) => {
     const [key, { newValue }] = ele;
     if (key !== 'enabled' || newValue) return;
-    abortHandler();
+    remove();
   });
 }
 
 function abortHandler() {
+  console.log('abort');
+  remove();
+}
+
+function remove() {
   const root = document.getElementById('commentu');
   if (!root) return;
   ReactDOM.unmountComponentAtNode(root);
@@ -139,16 +144,14 @@ function ReplyList() {
   }, [comments]);
 
   return (
-    <div>
-      <ToastContainer
-        autoClose={5000}
-        className="toast-message"
-        position="bottom-center"
-        theme="dark"
-        limit={3}
-        style={{ opacity: transparency }}
-      />
-    </div>
+    <ToastContainer
+      autoClose={5000}
+      className="toast-message"
+      position="bottom-center"
+      theme="dark"
+      limit={3}
+      style={{ opacity: transparency }}
+    />
   );
 }
 
@@ -165,12 +168,11 @@ function ReplyList() {
     return;
   }
 
-  const parentNode = document.getElementById('primary-inner');
+  const parentNode = document.querySelector('body');
   if (!parentNode) return;
   root = document.createElement('div');
   root.id = 'commentu';
-  const siblingNode = document.getElementById('below');
-  parentNode.insertBefore(root, siblingNode);
+  parentNode.appendChild(root);
 
   ReactDOM.render(
     <React.StrictMode>

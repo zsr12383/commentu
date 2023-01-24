@@ -6,7 +6,7 @@ function debounce(func: any) {
     if (table[tabId]) clearTimeout(table[tabId]);
     table[tabId] = setTimeout(() => {
       func(tabId);
-    }, 2000);
+    }, 1600);
   };
 }
 
@@ -19,10 +19,18 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
-  if (e.frameId || !isValidURL(e.url)) return;
+// chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
+//   if (e.frameId || !isValidURL(e.url)) return;
+//   chrome.storage.local.get('enabled', (data) => {
+//     if (data.enabled) debounceRunScript(e.tabId);
+//   });
+// });
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (!changeInfo.url || !(tab.url && isValidURL(tab.url))) return;
   chrome.storage.local.get('enabled', (data) => {
-    if (data.enabled) debounceRunScript(e.tabId);
+    if (data.enabled) debounceRunScript(tabId);
+    console.log(new Date().getTime());
   });
 });
 
