@@ -32,8 +32,9 @@ async function getReply() {
   const reply = await fetch(`${URL}${target}`).then((res) => res.json());
   const res = {};
   reply.forEach((ele: { textDisplay: string; textOriginal: string }) => {
-    let tmp;
     const { textDisplay, textOriginal } = ele;
+    if (textOriginal.length > 200) return;
+    let tmp;
     // eslint-disable-next-line no-cond-assign
     if ((tmp = textDisplay.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</))) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
