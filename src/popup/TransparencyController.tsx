@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Slider } from '@mui/material';
+import Slider from '@mui/material/Slider';
 
 const ControllerWrapper = styled.div`
   display: flex;
