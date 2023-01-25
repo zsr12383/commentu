@@ -3,7 +3,8 @@ import { isValidURL } from './common/URL';
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
     enabled: true,
-    transparency: 70,
+    opacity: 70,
+    duration: 5,
   });
 });
 

@@ -79,11 +79,15 @@ function remove() {
 
 function ReplyList() {
   const [comments, setComments] = useState<Bundle | null>(null);
-  const [transparency, setTransparency] = useState(0.7);
+  const [opacity, setOpacity] = useState(0.7);
+  const [duration, setDuration] = useState(5000);
 
   useEffect(() => {
-    chrome.storage.local.get('transparency', (data) => {
-      setTransparency(data.transparency / 100);
+    chrome.storage.local.get('opacity', (data) => {
+      setOpacity(data.opacity / 100);
+    });
+    chrome.storage.local.get('duration', (data) => {
+      setDuration(data.duration * 1000);
     });
   }, []);
 
@@ -117,11 +121,19 @@ function ReplyList() {
       }, 1000 / videoElement.playbackRate);
     }
 
-    function transparencyHandler(changes: { [p: string]: any }) {
+    function opacityHandler(changes: { [p: string]: any }) {
       Object.entries(changes).forEach((ele) => {
         const [key, { newValue }] = ele;
-        if (key !== 'transparency') return;
-        setTransparency(newValue / 100);
+        if (key !== 'opacity') return;
+        setOpacity(newValue / 100);
+      });
+    }
+
+    function durationHandler(changes: { [p: string]: any }) {
+      Object.entries(changes).forEach((ele) => {
+        const [key, { newValue }] = ele;
+        if (key !== 'duration') return;
+        setDuration(newValue * 1000);
       });
     }
 
@@ -130,7 +142,8 @@ function ReplyList() {
     videoElement.addEventListener('playing', playingHandler);
     videoElement.addEventListener('ratechange', playingHandler);
     chrome.storage.onChanged.addListener(turnOffHandler);
-    chrome.storage.onChanged.addListener(transparencyHandler);
+    chrome.storage.onChanged.addListener(opacityHandler);
+    chrome.storage.onChanged.addListener(durationHandler);
 
     return () => {
       videoElement.removeEventListener('abort', abortHandler);
@@ -138,19 +151,20 @@ function ReplyList() {
       videoElement.removeEventListener('playing', playingHandler);
       videoElement.removeEventListener('ratechange', playingHandler);
       chrome.storage.onChanged.removeListener(turnOffHandler);
-      chrome.storage.onChanged.removeListener(transparencyHandler);
+      chrome.storage.onChanged.removeListener(opacityHandler);
+      chrome.storage.onChanged.removeListener(durationHandler);
       clearInterval(interval);
     };
   }, [comments]);
 
   return (
     <ToastContainer
-      autoClose={5000}
+      autoClose={duration}
       className="toast-message"
       position="bottom-center"
       theme="dark"
       limit={3}
-      style={{ opacity: transparency }}
+      style={{ opacity }}
     />
   );
 }

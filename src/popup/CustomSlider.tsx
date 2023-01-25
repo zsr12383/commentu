@@ -22,29 +22,47 @@ const SliderWrapper = styled.div`
   padding: 0.5rem;
 `;
 
-export default function TransparencyController() {
+interface PropsType {
+  keyName: string;
+  min: number;
+  max: number;
+  initial: number;
+  step: number;
+}
+
+export default function CustomSlider({ keyName, min, max, initial, step }: PropsType) {
   const [isLoading, setIsLoading] = useState(true);
-  const [value, setValue] = useState(70);
+  const [value, setValue] = useState(initial);
 
   useEffect(() => {
-    chrome.storage.local.get('transparency', (data) => {
-      setValue(data.transparency);
+    chrome.storage.local.get(keyName, (data) => {
+      setValue(data[keyName]);
       setIsLoading(false);
     });
   }, []);
 
   const handleChange = useCallback((e, newValue) => {
     setValue(() => {
-      chrome.storage.local.set({ transparency: newValue });
+      chrome.storage.local.set({ [keyName]: newValue });
       return newValue;
     });
   }, []);
 
   return (
     <ControllerWrapper>
-      <ToggleTitle>투명도: </ToggleTitle>
+      <ToggleTitle>{keyName}: </ToggleTitle>
       <SliderWrapper>
-        {!isLoading && <Slider value={value} aria-label="Default" valueLabelDisplay="auto" onChange={handleChange} />}
+        {!isLoading && (
+          <Slider
+            value={value}
+            min={min}
+            max={max}
+            step={step}
+            aria-label="Default"
+            valueLabelDisplay="auto"
+            onChange={handleChange}
+          />
+        )}
       </SliderWrapper>
     </ControllerWrapper>
   );

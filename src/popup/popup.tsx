@@ -4,7 +4,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import Toggle from './toggle';
 import Header from './header';
-import TransparencyController from './TransparencyController';
+import CustomSlider from './CustomSlider';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -37,7 +37,8 @@ function Popup() {
       <Header />
       <Main>
         <Toggle />
-        <TransparencyController />
+        <CustomSlider keyName="opacity" min={0} max={100} initial={70} step={1} />
+        <CustomSlider keyName="duration" min={0.5} max={10} initial={5} step={0.1} />
       </Main>
       <Footer>
         <Email>zsr12383@gmail.com</Email>

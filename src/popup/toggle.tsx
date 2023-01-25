@@ -87,7 +87,7 @@ export default function Toggle() {
 
   return (
     <ToggleWrapper>
-      <ToggleTitle>On/Off: </ToggleTitle>
+      <ToggleTitle>switch: </ToggleTitle>
       <CheckBoxWrapper>
         {!isLoading && (
           <>
