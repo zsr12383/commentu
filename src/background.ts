@@ -1,17 +1,5 @@
 import { isValidURL } from './common/URL';
 
-function debounce(func: any) {
-  const table: any = {};
-  return (tabId: number) => {
-    if (table[tabId]) clearTimeout(table[tabId]);
-    table[tabId] = setTimeout(() => {
-      func(tabId);
-    }, 1600);
-  };
-}
-
-const debounceRunScript = debounce(runScript);
-
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
     enabled: true,
@@ -19,18 +7,10 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
-//   if (e.frameId || !isValidURL(e.url)) return;
-//   chrome.storage.local.get('enabled', (data) => {
-//     if (data.enabled) debounceRunScript(e.tabId);
-//   });
-// });
-
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (!changeInfo.url || !(tab.url && isValidURL(tab.url))) return;
   chrome.storage.local.get('enabled', (data) => {
-    if (data.enabled) debounceRunScript(tabId);
-    console.log(new Date().getTime());
+    if (data.enabled) runScript(tabId);
   });
 });
 

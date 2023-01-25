@@ -66,7 +66,7 @@ function turnOffHandler(changes: { [p: string]: any }) {
 }
 
 function abortHandler() {
-  console.log('abort');
+  // console.log('abort');
   remove();
 }
 
@@ -159,12 +159,6 @@ function ReplyList() {
   if (!isValidURL(document.location.href)) return;
   let root = document.getElementById('commentu');
   if (root) {
-    ReactDOM.render(
-      <React.StrictMode>
-        <ReplyList />
-      </React.StrictMode>,
-      root,
-    );
     return;
   }
 
