@@ -20,7 +20,6 @@ A Chrome extension that allows you to view comments that indicate the current pl
 * TypeScript
 * Webpack
 * React
-* Jest
 
 ## Project Structure
 
@@ -30,11 +29,6 @@ A Chrome extension that allows you to view comments that indicate the current pl
 * src/assets: static files
 * dist: Chrome Extension directory
 * dist/js: Generated JavaScript files
-
-## ~~API_KEY~~
-~~You need key of YouTube Data API V3: https://console.cloud.google.com/apis/~~
-
-API Gateway is complete. You don't need an API key.
 
 ## Setup
 
@@ -66,5 +60,3 @@ yarn watch
 
 Load `dist` directory
 
-## Test
-`npx jest` or `npm run test`
