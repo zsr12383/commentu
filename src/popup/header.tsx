@@ -32,7 +32,7 @@ export default function Header() {
       <HeaderContainer>
         <img src={bridge} alt="at popup page commentu's logo" height="32px" />
         <H1>commentu</H1>
-        <Version>1.0.2</Version>
+        <Version>1.0.5</Version>
       </HeaderContainer>
     </header>
   );

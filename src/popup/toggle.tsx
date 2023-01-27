@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const ToggleWrapper = styled.div`
   display: flex;
   width: 100%;
-  padding-top: 0.5rem;
+  align-items: center;
 `;
 
 const CheckBoxWrapper = styled.div`
@@ -23,11 +23,11 @@ const ToggleTitle = styled.span`
 
 const CheckBoxLabel = styled.label`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 14px;
+  left: 16px;
   width: 42px;
   height: 26px;
-  border-radius: 15px;
+  border-radius: 16px;
   background: #bebebe;
   cursor: pointer;
 

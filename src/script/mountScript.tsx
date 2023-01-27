@@ -41,7 +41,7 @@ interface Comment {
 function bundleComments(comments: Comment[]) {
   const res: Bundle = {};
   // console.log(comments);
-  comments.forEach((ele: { textDisplay: string; textOriginal: string }) => {
+  comments.forEach((ele: Comment) => {
     const { textDisplay, textOriginal } = ele;
     if (textOriginal.length > 200) return;
     const matchResult = textDisplay.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</);
@@ -102,6 +102,8 @@ function ReplyList() {
     console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
 
+    if (!videoElement) remove();
+
     let interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime);
       if (!comments[currentTime]) return;
@@ -145,6 +147,18 @@ function ReplyList() {
     chrome.storage.onChanged.addListener(opacityHandler);
     chrome.storage.onChanged.addListener(durationHandler);
 
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        // if (mutation.attributeName !== 'src') return;
+        // console.log('mutaion');
+        // const target = mutation.target as HTMLMediaElement;
+        console.log(mutation);
+        // console.log(mutation.target);
+      });
+    });
+    const config = { attributes: true, childList: true, characterData: true };
+    observer.observe(videoElement, config);
+
     return () => {
       videoElement.removeEventListener('abort', abortHandler);
       videoElement.removeEventListener('pause', pauseHandler);
@@ -154,6 +168,7 @@ function ReplyList() {
       chrome.storage.onChanged.removeListener(opacityHandler);
       chrome.storage.onChanged.removeListener(durationHandler);
       clearInterval(interval);
+      observer.disconnect();
     };
   }, [comments]);
 

@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 
 const ControllerWrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: 100%;
 `;
 
@@ -17,8 +17,7 @@ const ToggleTitle = styled.span`
 `;
 
 const SliderWrapper = styled.div`
-  width: 70%;
-  position: relative;
+  width: 65%;
   padding: 0.5rem;
 `;
 
