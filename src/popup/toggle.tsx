@@ -17,14 +17,14 @@ const ToggleTitle = styled.span`
   margin-top: 0.4rem;
   margin-left: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-family: Arial, sans-serif;
 `;
 
 const CheckBoxLabel = styled.label`
   position: absolute;
   top: 14px;
-  left: 16px;
+  left: 24px;
   width: 42px;
   height: 26px;
   border-radius: 16px;

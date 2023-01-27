@@ -12,7 +12,7 @@ const ToggleTitle = styled.span`
   margin-top: 1rem;
   margin-left: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-family: Arial, sans-serif;
 `;
 
