@@ -22,11 +22,10 @@ function getTime(currentTimeString: string) {
   );
 }
 
-async function getComments() {
-  const tempArray = window.location.search.match(/=([^=&/]+)/);
-  if (!tempArray) return [];
-  const target = tempArray[1];
-  const comments = await fetch(`${URL}${target}`).then((res) => res.json());
+async function getComments(target: string) {
+  const comments = await fetch(`${URL}${target}`)
+    .then((res) => res.json())
+    .catch(() => []);
   return comments;
 }
 
@@ -38,9 +37,9 @@ interface Comment {
   textDisplay: string;
   textOriginal: string;
 }
+
 function bundleComments(comments: Comment[]) {
   const res: Bundle = {};
-  // console.log(comments);
   comments.forEach((ele: Comment) => {
     const { textDisplay, textOriginal } = ele;
     if (textOriginal.length > 200) return;
@@ -65,11 +64,6 @@ function turnOffHandler(changes: { [p: string]: any }) {
   });
 }
 
-function abortHandler() {
-  // console.log('abort');
-  remove();
-}
-
 function remove() {
   const root = document.getElementById('commentu');
   if (!root) return;
@@ -77,7 +71,20 @@ function remove() {
   root.remove();
 }
 
-function ReplyList() {
+function getVideoId(currentURL: string) {
+  if (!isValidURL(currentURL)) {
+    return '';
+  }
+  const tempArray = window.location.search.match(/=([^=&/]+)/);
+  if (!tempArray) return '';
+  return tempArray[1];
+}
+
+interface PropsType {
+  videoId: string;
+}
+
+function ReplyList({ videoId }: PropsType) {
   const [comments, setComments] = useState<Bundle | null>(null);
   const [opacity, setOpacity] = useState(0.7);
   const [duration, setDuration] = useState(5000);
@@ -92,7 +99,7 @@ function ReplyList() {
   }, []);
 
   useEffect(() => {
-    getComments().then((comments) => {
+    getComments(videoId).then((comments) => {
       setComments(bundleComments(comments));
     });
   }, []);
@@ -101,8 +108,6 @@ function ReplyList() {
     if (comments === null) return undefined;
     console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
-
-    if (!videoElement) remove();
 
     let interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime);
@@ -139,7 +144,6 @@ function ReplyList() {
       });
     }
 
-    videoElement.addEventListener('abort', abortHandler);
     videoElement.addEventListener('pause', pauseHandler);
     videoElement.addEventListener('playing', playingHandler);
     videoElement.addEventListener('ratechange', playingHandler);
@@ -149,18 +153,14 @@ function ReplyList() {
 
     const observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
-        // if (mutation.attributeName !== 'src') return;
-        // console.log('mutaion');
-        // const target = mutation.target as HTMLMediaElement;
-        console.log(mutation);
-        // console.log(mutation.target);
+        if (mutation.attributeName !== 'src') return;
+        remove();
       });
     });
     const config = { attributes: true, childList: true, characterData: true };
     observer.observe(videoElement, config);
 
     return () => {
-      videoElement.removeEventListener('abort', abortHandler);
       videoElement.removeEventListener('pause', pauseHandler);
       videoElement.removeEventListener('playing', playingHandler);
       videoElement.removeEventListener('ratechange', playingHandler);
@@ -184,23 +184,23 @@ function ReplyList() {
   );
 }
 
-(() => {
-  if (!isValidURL(document.location.href)) return;
-  let root = document.getElementById('commentu');
-  if (root) {
-    return;
-  }
+function init() {
+  const currentURL = window.location.href;
+  const videoId = getVideoId(currentURL);
+  if (!videoId || document.getElementById('commentu') || !document.querySelector('video')) return;
 
   const parentNode = document.querySelector('body');
   if (!parentNode) return;
-  root = document.createElement('div');
+  const root = document.createElement('div');
   root.id = 'commentu';
   parentNode.appendChild(root);
 
   ReactDOM.render(
     <React.StrictMode>
-      <ReplyList />
+      <ReplyList videoId={videoId} />
     </React.StrictMode>,
     root,
   );
-})();
+}
+
+init();
