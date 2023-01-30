@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
-import { isValidURL } from '../common/URL';
+import { isValidURL, isYoutubeURL } from '../common/URL';
 
 const URL = 'https://gh8vx163lc.execute-api.ap-northeast-2.amazonaws.com/commentuV1/commentu?videoId=';
 
@@ -72,12 +72,18 @@ function remove() {
 }
 
 function getVideoId(currentURL: string) {
-  if (!isValidURL(currentURL)) {
-    return '';
+  if (isValidURL(currentURL)) {
+    const tempArray = window.location.search.match(/=([^=&/]+)/);
+    if (!tempArray) return '';
+    return tempArray[1];
   }
-  const tempArray = window.location.search.match(/=([^=&/]+)/);
-  if (!tempArray) return '';
-  return tempArray[1];
+  if (!isYoutubeURL(currentURL)) return '';
+  const target = document.querySelectorAll('.ytp-tooltip-bg') as NodeListOf<HTMLElement>;
+  if (target.length < 2) return '';
+  const url = target[1].style.backgroundImage;
+  const match = url.match(/^url\("https:\/\/i.ytimg.com\/vi\/([^/]+)/);
+  if (!match) return '';
+  return match[1];
 }
 
 interface PropsType {
@@ -89,6 +95,7 @@ function ReplyList({ videoId }: PropsType) {
   const [opacity, setOpacity] = useState(0.7);
   const [duration, setDuration] = useState(5000);
   const [count, setCount] = useState(1);
+  // const [needRestart, setNeedRestart] = useState(false);
 
   useEffect(() => {
     chrome.storage.local.get('opacity', (data) => {
@@ -108,9 +115,14 @@ function ReplyList({ videoId }: PropsType) {
 
   useEffect(() => {
     if (comments === null) return undefined;
-    console.log(comments);
+    // console.log(comments);
     const videoElement = document.querySelector('video') as HTMLMediaElement;
+    if (!videoElement) {
+      remove();
+      return undefined;
+    }
 
+    let needRestart = false;
     let interval = setInterval(() => {
       const currentTime = Math.floor(videoElement.currentTime);
       if (!comments[currentTime]) return;
@@ -164,6 +176,7 @@ function ReplyList({ videoId }: PropsType) {
     const observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         if (mutation.attributeName !== 'src') return;
+        needRestart = true;
         remove();
       });
     });
@@ -180,6 +193,9 @@ function ReplyList({ videoId }: PropsType) {
       chrome.storage.onChanged.removeListener(countHandler);
       clearInterval(interval);
       observer.disconnect();
+      if (needRestart) {
+        init();
+      }
     };
   }, [comments]);
 

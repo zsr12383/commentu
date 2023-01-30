@@ -1,4 +1,4 @@
-import { isValidURL } from './common/URL';
+import { isValidURL, isYoutubeURL } from './common/URL';
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
@@ -9,10 +9,10 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (!changeInfo.url || !(tab.url && isValidURL(tab.url))) return;
+chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
+  if (e.frameId || !isYoutubeURL(e.url)) return;
   chrome.storage.local.get('enabled', (data) => {
-    if (data.enabled) runScript(tabId);
+    if (data.enabled) runScript(e.tabId);
   });
 });
 
