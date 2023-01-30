@@ -9,10 +9,10 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.webNavigation.onHistoryStateUpdated.addListener((e) => {
-  if (e.frameId || !isYoutubeURL(e.url)) return;
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (!changeInfo.url || !(tab.url && isYoutubeURL(tab.url))) return;
   chrome.storage.local.get('enabled', (data) => {
-    if (data.enabled) runScript(e.tabId);
+    if (data.enabled) runScript(tabId);
   });
 });
 
