@@ -12,10 +12,10 @@ const GlobalStyle = createGlobalStyle`
 
 const Main = styled.main`
   width: 16rem;
-  height: 10rem;
-  background: #f4f4f4;
+  height: 12rem;
+  background: #eeeeee;
   padding-left: 1rem;
-  padding-top: 0.5rem;
+  padding-right: 1rem;
 `;
 
 const Footer = styled.footer`
@@ -29,9 +29,17 @@ const Footer = styled.footer`
 const Email = styled.a`
   position: absolute;
   right: 1rem;
-  font-family: Arial, sans-serif;
+  font-family: Inter, sans-serif;
   font-size: 0.3rem;
   text-decoration: none;
+`;
+
+const BetweenBorder = styled.hr`
+  appearance: none;
+  height: 0.5px;
+  border-width: 0;
+  color: #cac9c9;
+  background-color: #cac9c9;
 `;
 
 function Popup() {
@@ -40,7 +48,9 @@ function Popup() {
       <Header />
       <Main>
         <Toggle />
+        <BetweenBorder />
         <CustomSlider keyName="opacity" min={0} max={100} initial={70} step={1} />
+        <BetweenBorder />
         <CustomSlider keyName="duration" min={0.5} max={10} initial={5} step={0.1} />
       </Main>
       <Footer>

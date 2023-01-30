@@ -96,6 +96,7 @@ function ReplyList({ videoId }: PropsType) {
     chrome.storage.local.get('duration', (data) => {
       setDuration(data.duration * 1000);
     });
+    chrome.storage.onChanged.addListener(turnOffHandler);
   }, []);
 
   useEffect(() => {
@@ -147,7 +148,6 @@ function ReplyList({ videoId }: PropsType) {
     videoElement.addEventListener('pause', pauseHandler);
     videoElement.addEventListener('playing', playingHandler);
     videoElement.addEventListener('ratechange', playingHandler);
-    chrome.storage.onChanged.addListener(turnOffHandler);
     chrome.storage.onChanged.addListener(opacityHandler);
     chrome.storage.onChanged.addListener(durationHandler);
 

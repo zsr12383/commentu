@@ -5,28 +5,24 @@ const ToggleWrapper = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-`;
-
-const CheckBoxWrapper = styled.div`
-  position: relative;
-  padding: 0.5rem;
-  margin-left: 0.5rem;
+  justify-content: space-between;
+  height: 3rem;
 `;
 
 const ToggleTitle = styled.span`
   margin-top: 0.4rem;
   margin-left: 0.5rem;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 0.8rem;
-  font-family: Arial, sans-serif;
+  font-family: Inter, sans-serif;
 `;
 
 const CheckBoxLabel = styled.label`
-  position: absolute;
-  top: 14px;
-  left: 24px;
-  width: 42px;
-  height: 26px;
+  margin-top: 4px;
+  margin-right: 8px;
+  display: block;
+  width: 32px;
+  height: 16px;
   border-radius: 16px;
   background: #bebebe;
   cursor: pointer;
@@ -35,9 +31,8 @@ const CheckBoxLabel = styled.label`
     content: '';
     display: block;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    margin: 3px;
+    width: 16px;
+    height: 16px;
     background: #ffffff;
     box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
@@ -47,9 +42,8 @@ const CheckBoxLabel = styled.label`
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
-  border-radius: 15px;
-  width: 42px;
-  height: 26px;
+  width: 0px;
+  height: 0px;
 
   &:checked + ${CheckBoxLabel} {
     background: #4fbe79;
@@ -58,9 +52,9 @@ const CheckBox = styled.input`
       content: '';
       display: block;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      margin-left: 21px;
+      width: 16px;
+      height: 16px;
+      margin-left: 16px;
       transition: 0.2s;
     }
   }
@@ -87,15 +81,13 @@ export default function Toggle() {
 
   return (
     <ToggleWrapper>
-      <ToggleTitle>switch: </ToggleTitle>
-      <CheckBoxWrapper>
-        {!isLoading && (
-          <>
-            <CheckBox id="checkbox" type="checkbox" checked={isToggled} onChange={handleToggle} />
-            <CheckBoxLabel htmlFor="checkbox" />
-          </>
-        )}
-      </CheckBoxWrapper>
+      <ToggleTitle>switch </ToggleTitle>
+      {!isLoading && (
+        <>
+          <CheckBox id="checkbox" type="checkbox" checked={isToggled} onChange={handleToggle} />
+          <CheckBoxLabel htmlFor="checkbox" />
+        </>
+      )}
     </ToggleWrapper>
   );
 }

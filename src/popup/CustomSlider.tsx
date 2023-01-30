@@ -11,13 +11,13 @@ const ControllerWrapper = styled.div`
 const ToggleTitle = styled.span`
   margin-top: 1rem;
   margin-left: 0.5rem;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 0.8rem;
-  font-family: Arial, sans-serif;
+  font-family: Inter, sans-serif;
 `;
 
 const SliderWrapper = styled.div`
-  width: 65%;
+  width: 50%;
   padding: 0.5rem;
 `;
 
@@ -49,7 +49,7 @@ export default function CustomSlider({ keyName, min, max, initial, step }: Props
 
   return (
     <ControllerWrapper>
-      <ToggleTitle>{keyName}: </ToggleTitle>
+      <ToggleTitle>{keyName}</ToggleTitle>
       <SliderWrapper>
         {!isLoading && (
           <Slider
