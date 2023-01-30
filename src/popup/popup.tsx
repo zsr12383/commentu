@@ -11,8 +11,8 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Main = styled.main`
-  width: 16rem;
-  height: 12rem;
+  width: 24rem;
+  height: 16rem;
   background: #eeeeee;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -52,6 +52,8 @@ function Popup() {
         <CustomSlider keyName="opacity" min={0} max={100} initial={70} step={1} />
         <BetweenBorder />
         <CustomSlider keyName="duration" min={0.5} max={10} initial={5} step={0.1} />
+        <BetweenBorder />
+        <CustomSlider keyName="number of messages" min={1} max={5} initial={1} step={1} />
       </Main>
       <Footer>
         <Email href="mailto:zsr12383@gmail.com">zsr12383@gmail.com</Email>

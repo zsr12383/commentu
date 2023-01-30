@@ -19,7 +19,7 @@ const ToggleTitle = styled.span`
 
 const CheckBoxLabel = styled.label`
   margin-top: 4px;
-  margin-right: 8px;
+  margin-right: 6px;
   display: block;
   width: 32px;
   height: 16px;
@@ -42,8 +42,8 @@ const CheckBoxLabel = styled.label`
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
 
   &:checked + ${CheckBoxLabel} {
     background: #4fbe79;

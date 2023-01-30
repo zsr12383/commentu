@@ -20,8 +20,8 @@ const H1 = styled.h1`
 `;
 
 const Version = styled.span`
-  margin-left: 7rem;
-  margin-bottom: 1.4rem;
+  margin-left: 1rem;
+  margin-bottom: 1.6rem;
   font-size: 0.3rem;
 `;
 

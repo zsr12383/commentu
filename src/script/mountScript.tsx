@@ -42,7 +42,7 @@ function bundleComments(comments: Comment[]) {
   const res: Bundle = {};
   comments.forEach((ele: Comment) => {
     const { textDisplay, textOriginal } = ele;
-    if (textOriginal.length > 200) return;
+    if (textOriginal.length > 180) return;
     const matchResult = textDisplay.match(/<a href[^<>]+>(([0-9]+:)?[0-9]+:[0-9]+)</);
     if (!matchResult) return;
     let indexTime = getTime(matchResult[1]) - 1;
@@ -88,6 +88,7 @@ function ReplyList({ videoId }: PropsType) {
   const [comments, setComments] = useState<Bundle | null>(null);
   const [opacity, setOpacity] = useState(0.7);
   const [duration, setDuration] = useState(5000);
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     chrome.storage.local.get('opacity', (data) => {
@@ -145,11 +146,20 @@ function ReplyList({ videoId }: PropsType) {
       });
     }
 
+    function countHandler(changes: { [p: string]: any }) {
+      Object.entries(changes).forEach((ele) => {
+        const [key, { newValue }] = ele;
+        if (key !== 'number of messages') return;
+        setCount(newValue);
+      });
+    }
+
     videoElement.addEventListener('pause', pauseHandler);
     videoElement.addEventListener('playing', playingHandler);
     videoElement.addEventListener('ratechange', playingHandler);
     chrome.storage.onChanged.addListener(opacityHandler);
     chrome.storage.onChanged.addListener(durationHandler);
+    chrome.storage.onChanged.addListener(countHandler);
 
     const observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
@@ -167,6 +177,7 @@ function ReplyList({ videoId }: PropsType) {
       chrome.storage.onChanged.removeListener(turnOffHandler);
       chrome.storage.onChanged.removeListener(opacityHandler);
       chrome.storage.onChanged.removeListener(durationHandler);
+      chrome.storage.onChanged.removeListener(countHandler);
       clearInterval(interval);
       observer.disconnect();
     };
@@ -175,10 +186,11 @@ function ReplyList({ videoId }: PropsType) {
   return (
     <ToastContainer
       autoClose={duration}
+      hideProgressBar
       className="toast-message"
       position="bottom-center"
       theme="dark"
-      limit={3}
+      limit={count}
       style={{ opacity }}
     />
   );
