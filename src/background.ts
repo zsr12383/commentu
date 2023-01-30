@@ -5,6 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
     enabled: true,
     opacity: 70,
     duration: 5,
+    'number of messages': 1,
   });
 });
 
