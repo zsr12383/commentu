@@ -8,12 +8,10 @@ A Chrome extension that allows you to view comments that indicate the current pl
 
 ## Demo
 
-### normal
-[commentu5.webm](https://user-images.githubusercontent.com/62196278/213796216-659b2a2a-f35a-4983-81c0-6a14a3f89c57.webm)
+https://user-images.githubusercontent.com/62196278/215810846-35904a66-409b-403f-afb1-eae5dc0aa0b2.mp4
 
-<br>
+<br/>
 
-### full screen
 [commentu1.webm](https://user-images.githubusercontent.com/62196278/213736107-6de34d4c-dd41-4129-b765-3d6d665e955b.webm)
 
 ## Includes
