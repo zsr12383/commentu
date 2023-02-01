@@ -1,10 +1,10 @@
 # commentu
 
-![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
-
 유튜브에서 현재 재생 시각을 나타내는 댓글을 함께 볼 수 있는 크롬 익스텐션입니다.
 
 A Chrome extension that allows you to view comments that indicate the current playback time on YouTube.
+
+[다운로드](https://chrome.google.com/webstore/detail/commentu/jcehlnipihamdcngkmlmmaaacdcnfchf?hl=ko)
 
 ## Demo
 
