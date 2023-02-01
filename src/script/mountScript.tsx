@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
-import { isValidURL, isYoutubeURL } from '../common/URL';
+import { isValidURL } from '../common/URL';
 
 const URL = 'https://gh8vx163lc.execute-api.ap-northeast-2.amazonaws.com/commentuV1/commentu?videoId=';
 
@@ -23,9 +23,7 @@ function getTime(currentTimeString: string) {
 }
 
 async function getComments(target: string) {
-  const comments = await fetch(`${URL}${target}`)
-    .then((res) => res.json())
-    .catch(() => []);
+  const comments = await fetch(`${URL}${target}`).then((res) => res.json());
   return comments;
 }
 
@@ -72,18 +70,10 @@ function remove() {
 }
 
 function getVideoId(currentURL: string) {
-  if (isValidURL(currentURL)) {
-    const tempArray = window.location.search.match(/=([^=&/]+)/);
-    if (!tempArray) return '';
-    return tempArray[1];
-  }
-  if (!isYoutubeURL(currentURL)) return '';
-  const target = document.querySelectorAll('.ytp-tooltip-bg') as NodeListOf<HTMLElement>;
-  if (target.length < 2) return '';
-  const url = target[1].style.backgroundImage;
-  const match = url.match(/^url\("https:\/\/i.ytimg.com\/vi\/([^/]+)/);
-  if (!match) return '';
-  return match[1];
+  if (!isValidURL(currentURL)) return '';
+  const tempArray = window.location.search.match(/=([^=&/]+)/);
+  if (!tempArray) return '';
+  return tempArray[1];
 }
 
 interface PropsType {
@@ -95,7 +85,6 @@ function ReplyList({ videoId }: PropsType) {
   const [opacity, setOpacity] = useState(0.7);
   const [duration, setDuration] = useState(5000);
   const [count, setCount] = useState(1);
-  // const [needRestart, setNeedRestart] = useState(false);
 
   useEffect(() => {
     chrome.storage.local.get('opacity', (data) => {
@@ -108,9 +97,11 @@ function ReplyList({ videoId }: PropsType) {
   }, []);
 
   useEffect(() => {
-    getComments(videoId).then((comments) => {
-      setComments(bundleComments(comments));
-    });
+    getComments(videoId)
+      .then((comments) => {
+        setComments(bundleComments(comments));
+      })
+      .catch(() => remove());
   }, []);
 
   useEffect(() => {
@@ -173,8 +164,8 @@ function ReplyList({ videoId }: PropsType) {
     chrome.storage.onChanged.addListener(durationHandler);
     chrome.storage.onChanged.addListener(countHandler);
 
-    const observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
         if (mutation.attributeName !== 'src') return;
         needRestart = true;
         remove();
@@ -213,9 +204,9 @@ function ReplyList({ videoId }: PropsType) {
 }
 
 function init() {
-  const currentURL = window.location.href;
-  const videoId = getVideoId(currentURL);
-  if (!videoId || document.getElementById('commentu') || !document.querySelector('video')) return;
+  if (document.getElementById('commentu') || !document.querySelector('video')) return;
+  const videoId = getVideoId(window.location.href);
+  if (!videoId) return;
 
   const parentNode = document.querySelector('body');
   if (!parentNode) return;

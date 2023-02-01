@@ -1,4 +1,4 @@
-import { isValidURL, isYoutubeURL } from './common/URL';
+import { isValidURL } from './common/URL';
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
@@ -9,15 +9,15 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (!changeInfo.url || !(tab.url && isYoutubeURL(tab.url))) return;
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (!changeInfo.url || !(tab.url && isValidURL(tab.url))) return;
   chrome.storage.local.get('enabled', (data) => {
     if (data.enabled) runScript(tabId);
   });
 });
 
 function runScript(tabId: number) {
-  chrome.tabs.get(tabId, function () {
+  chrome.tabs.get(tabId, () => {
     if (chrome.runtime.lastError) return;
     chrome.scripting.executeScript({
       target: { tabId },
@@ -34,7 +34,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
   });
   if (!data) return;
   const { newValue } = data[1];
-  chrome.tabs.query({}, function (tabs) {
+  chrome.tabs.query({}, (tabs) => {
     tabs.forEach((tab) => {
       if (!tab.id || !tab.url || !isValidURL(tab.url) || !newValue) return;
       runScript(tab.id);
