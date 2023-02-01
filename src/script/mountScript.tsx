@@ -93,6 +93,9 @@ function ReplyList({ videoId }: PropsType) {
     chrome.storage.local.get('duration', (data) => {
       setDuration(data.duration * 1000);
     });
+    chrome.storage.local.get('number of messages', (data) => {
+      setCount(data['number of messages']);
+    });
     chrome.storage.onChanged.addListener(turnOffHandler);
   }, []);
 
