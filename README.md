@@ -31,16 +31,12 @@ A Chrome extension that allows you to view comments that indicate the current pl
 ## Setup
 
 ```bash
-npm install
-# or
 yarn install
 ```
 
 ## Build
 
 ```bash
-npm run build
-# or
 yarn build
 ```
 
@@ -49,8 +45,6 @@ yarn build
 ### terminal
 
 ```bash
-npm run watch
-# or
 yarn watch
 ```
 
